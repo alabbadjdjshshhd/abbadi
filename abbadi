@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>متجر عبادي</title>
+<style>
+  body {
+    background-color: #000;
+    color: #fff;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    text-align: center;
+    padding: 30px;
+    position: relative;
+    overflow: hidden;
+    margin: 0;
+  }
+
+  /* تأثير اللمعان */
+  @keyframes softGlow {
+    0%, 100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+    background: linear-gradient(
+      270deg,
+      rgba(255, 255, 255, 0.05),
+      rgba(255, 255, 255, 0.15),
+      rgba(255, 255, 255, 0.05)
+    );
+    background-size: 200% 200%;
+    animation: softGlow 10s ease-in-out infinite;
+    z-index: 0;
+  }
+
+  h1 {
+    font-size: 3.5rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+    letter-spacing: 5px;
+    text-shadow: 0 0 10px #1a73e8, 0 0 20px #1a73e8;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+    margin-bottom: 25px;
+    opacity: 0.7;
+  }
+
+  .tabs {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-bottom: 25px;
+  }
+
+  .tab {
+    cursor: pointer;
+    font-size: 1.3rem;
+    padding: 8px 25px;
+    border-radius: 25px;
+    background-color: #222;
+    box-shadow: 0 0 10px #1a73e8 inset;
+    user-select: none;
+    transition: background-color 0.3s ease;
+  }
+
+  .tab.active,
+  .tab:hover {
+    background-color: #1a73e8;
+    box-shadow: 0 0 15px #1a73e8;
+  }
+
+  #codeInput {
+    font-size: 1.2rem;
+    padding: 10px;
+    width: 270px;
+    border-radius: 8px;
+    border: none;
+    margin-bottom: 15px;
+    outline: none;
+  }
+
+  #activateBtn {
+    font-size: 1.2rem;
+    padding: 10px 25px;
+    border-radius: 8px;
+    border: none;
+    background-color: #1a73e8;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  #activateBtn:hover {
+    background-color: #155ab6;
+  }
+
+  #content {
+    margin-top: 25px;
+    font-size: 1.4rem;
+    min-height: 60px;
+    font-weight: bold;
+  }
+
+  footer {
+    margin-top: 50px;
+    font-size: 0.9rem;
+    opacity: 0.7;
+  }
+
+  footer a {
+    color: #1a73e8;
+    text-decoration: none;
+  }
+  footer a:hover {
+    text-decoration: underline;
+  }
+</style>
+</head>
+<body>
+
+<h1>عـبـادي بلس</h1>
+<div class="subtitle">أهلاً بك في متجر عبادي</div>
+
+<div class="tabs">
+  <div class="tab active" id="tabInsta" onclick="switchTab('insta')">حسابات إنستا</div>
+  <div class="tab" id="tabUsers" onclick="switchTab('users')">يوزرات</div>
+</div>
+
+<input type="text" id="codeInput" placeholder="أدخل كود التفعيل هنا" autocomplete="off" />
+
+<button id="activateBtn" onclick="activateCode()">تفعيل</button>
+
+<div id="content"></div>
+
+<footer>
+  <div>متجر عبادي حياك الله</div>
+  <div style="margin-top:10px;">
+    رابط انستا: <a href="https://instagram.com/your_instagram" target="_blank">@your_instagram</a>
+  </div>
+</footer>
+
+<script>
+  // أكواد التفعيل لحسابات إنستا ويوزرات
+  let codes = {
+    insta: {
+      "ABADI001": "حساب إنستا: @_9dtd",
+      "ABADI002": "حساب إنستا: @example2"
+    },
+    users: {
+      "USER001": "يوزر: user_001",
+      "USER002": "يوزر: user_002"
+    }
+  };
+
+  let usedCodes = new Set();
+  let currentTab = 'insta';
+
+  function switchTab(tab) {
+    currentTab = tab;
+    document.getElementById('tabInsta').classList.toggle('active', tab === 'insta');
+    document.getElementById('tabUsers').classList.toggle('active', tab === 'users');
+    document.getElementById('content').textContent = '';
+    document.getElementById('codeInput').value = '';
+  }
+
+  function activateCode() {
+    const input = document.getElementById('codeInput').value.trim().toUpperCase();
+    const contentDiv = document.getElementById('content');
+
+    if (!input) {
+      contentDiv.textContent = "رجاءً أدخل كود التفعيل.";
+      return;
+    }
+
+    if (usedCodes.has(input)) {
+      contentDiv.textContent = "هذا الكود تم استخدامه مسبقاً.";
+      return;
+    }
+
+    if (codes[currentTab][input]) {
+      contentDiv.textContent = `تم التفعيل! المحتوى الخاص بك: ${codes[currentTab][input]}`;
+      usedCodes.add(input);
+      delete codes[currentTab][input];
+    } else {
+      contentDiv.textContent = "كود التفعيل غير صحيح.";
+    }
+  }
+</script>
+
+</body>
+</html>
